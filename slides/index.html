@@ -1,0 +1,285 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Creating a Django Package</title>
+		<meta name="description" content="Step by step to create a Django Package">
+		<meta name="author" content="Élysson Mendes Rezende">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h1>Creating a Django Package</h1>
+					<h3>Step by step to create your third party Django package</h3>
+					<p>
+						<small>Created by <a href="http://elyssonmr.com.br">Élysson Mendes Rezende</a></small>
+					</p>
+				</section>
+
+				<section>
+					<h2>What is a Django package?</h2>
+					<ul>
+						<li>Reusable code for a commom problem</li>
+						<li>Essentially a Django Package is a Python Package</li>
+						<li>Could be a package or an entire Django Application</li>
+						<li>A package should contain the "__init__.py" file</li>
+						<li>In case of Django application it should follow common Django conventions such as models, tests, urls and views</li>
+						<li>A package should only depends of itself</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Creating the app</h2>
+					<ol>
+						<li>Create a Django app with a name of your choice. I.e: notification</li>
+						<li>Create the "templatetags" folder inside the new app</li>
+						<li>Create a template tag file "notify.py" and create a "__init__.py" file. Leave they empty for now</li>
+						<li>We are going to add some content later</li>
+					</ol>
+				</section>
+
+				<section>
+					<h2>Configuring the package</h2>
+					<ul>
+						<li>Create a file called "setup.py" inside project's root directory</li>
+						<li>This file contains some information about the package. Such as: name, version, packages, descripton and etc</li>
+						<li>Write some code so that your file should be like this:</li>
+					</ul>
+					<pre><code class="python"># coding: utf-8
+import os
+from setuptools import setup
+current_dir = os.path.abspath(os.path.dirname(__file__))
+readme = open(os.path.join(current_dir, 'README.md')).read()
+setup(
+    name='django-templatetags',
+    version='1.0',
+    packages=['notifications'],
+    description='Custom tenplate tags for notification',
+    long_description=readme,
+    author='Élysson MR',
+    author_email='elyssonmr@gmail.com',
+    url='https://github.com/elyssonmr/django_pkg/',
+    license='MIT',
+    install_requires=[
+        'Django>=1.8',
+    ]
+)</code></pre>
+				</section>
+
+				<section>
+					<h2>Configuring the package</h2>
+					<ul>
+						<li>Finally we need a manifest file telling what files we want to distribute</li>
+						<li>Create a file called "MANIFEST.in" inside project's root directory with those lines:</li>
+					</ul>
+					<pre><code>
+include *.md
+recursive-include templatetagspkg *.py *.html
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Installing the package</h2>
+					<ul>
+						<li>Now the package is ready to be installed</li>
+						<li>To do it just run "python setup.py develop"</li>
+						<li>If everything is installed correctly, this message should be shown:</li>
+					</ul>
+					<pre><code>$ python setup.py develop
+...
+Installed /path/to/project/django_pkg
+Processing dependencies for django-templatetags==1.0
+Searching for Django==1.8.5
+Best match: Django 1.8.5
+Adding Django 1.8.5 to easy-install.pth file
+Installing django-admin script to /home/user/.virtualenvs/venv/bin
+
+Using /home/user/.virtualenvs/venv/lib/python2.7/site-packages
+Finished processing dependencies for django-templatetags==1.0</code></pre>
+				</section>
+
+				<section>
+					<h2>Now What?</h2>
+					<ul>
+						<li>Now our packages is ready to be distributed</li>
+						<li>We just need to add some code! Right?</li>
+						<li>After that we can distribute it for everyone!!!</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Coding some template tags</h2>
+					<ul>
+						<li>First we have to write some templatetags in "notification/templatetags/notify.py":</li>
+					</ul>
+					<pre><code class="python"># coding: utf-8
+
+from django import template
+
+
+register = template.Library()
+
+
+@register.inclusion_tag('notification/notification.html')
+def render_notification():
+    return {}
+
+
+@register.filter
+def format_hello(value, nome):
+    return value % (nome)
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Coding some template tags</h2>
+					<ul>
+						<li>Now we have to create o html file in "notification/templates/notification/notification.html":</li>
+					</ul>
+					<pre><code class="html">
+<p>Hi I am a notification</p>
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Testing template tags</h2>
+					<ul>
+						<li>There is no need to create a full django project to test the code, just create a settings to use with the tests</li>
+						<li>For example: creating a "test_settings.py" inside our project's root we can execute our tests using "$ python django-admin.py test --settings=test_settings"</li>
+						<li>We just need to add a few lines to our "test_settings.py":</li>
+					</ul>
+					<pre><code class="python">INSTALLED_APPS = (
+    'notification',
+)
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': ':memory:',
+    }
+}
+SECRET_KEY = "secret_key_for_testing"</code></pre>
+				</section>
+
+				<section>
+					<h2>Testing template tags</h2>
+					<ul>
+						<li>Now we need to write some tests to validate those template tags</li>
+						<li>The test module "notification/test.py" should looks like:</li>
+					</ul>
+					<pre><code class="python"># coding: utf-8
+from django.test import TestCase
+from django.template import Context
+from django.template import Template
+
+class TemplateTagTest(TestCase):
+    def setUp(self):
+        self.template = Template('{% load notify %} {% render_notification %}')
+
+    def test_templatetag_inclusion(self):
+        rendered = self.template.render(Context())
+        self.assertIn('am a notification', rendered)
+
+class FilterTest(TestCase):
+    def setUp(self):
+		self.template = Template('{% load notify %}' +
+			' {{ "Hello %s, How are you?"|format_hello:"Élysson MR" }}')
+
+    def test_filter(self):
+        rendered = self.template.render(Context())
+        self.assertIn(u'Élysson MR', rendered)</code></pre>
+				</section>
+				<section>
+					<h2>Distributing</h2>
+					<ul>
+						<li>Now everything is ready to distribute the package for everyone</li>
+						<li>But first we have to register a new <a href="https://pypi.python.org/pypi?%3Aaction=register_form">PyPi account</a></li>
+						<li>After the registration open your console and run "python setup.py register"</li>
+						<li>Select option "1", put your username and password and your package is now registered</li>
+						<li>To finish we need to upload all files to PyPi server, run "python setup.py sdist upload"</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Now we're done</h2>
+					<ul>
+						<li>Now everyone can add our package using the pip command "pip install django-templatetags"</li>
+						<li>Then just add the app name into INSTALLED_APPS in the settings file</li>
+						<li>To upload an update just run the upload command again, remmember to change your "setup.py" version</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Conclusion</h2>
+					<ul>
+						<li>The process to create a Django package is very simple</li>
+						<li>Many times we code to solve the same problems, why not create a package for that?</li>
+						<li>Using packages we can share many solutions of common problems with others developers</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>References</h2>
+					<ul>
+						<li><a href="http://hirokiky.org/tech/create_django_library.html#create-your-application">How to create your first Django Package</a></li>
+						<li><a href="https://docs.djangoproject.com/en/1.8/intro/reusable-apps/">How to write reusable apps</a></li>
+						<li><a href="https://docs.python.org/2/tutorial/modules.html#packages">Python Modules</a></li>
+						<li><a href="https://pypi.python.org/pypi">The Python Package Index</a></li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Thank you!!</h2>
+					<a href="http://elyssonmr.com.br">Élysson Mendes Rezende</a>
+				</section>
+			</div>
+		</div>
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+		<script>
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+		</script>
+	</body>
+</html>
