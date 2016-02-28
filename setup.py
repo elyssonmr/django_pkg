@@ -1,16 +1,17 @@
 # coding: utf-8
 
 import os
+
 from setuptools import setup
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 readme = open(os.path.join(current_dir, 'README.md')).read()
 
 setup(
-    name='django-templatetags',
+    name='pythononrio-templatetags',
     version='1.0',
-    packages=['notification'],
-    description='Custom template tags for notification',
+    packages=['notificacoes'],
+    description='Templates Tags desenvolvidos no Python On Rio',
     long_description=readme,
     author='Élysson MR',
     author_email='elyssonmr@gmail.com',

@@ -2,9 +2,9 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Creating a Django Package</title>
-		<meta name="description" content="Step by step to create a Django Package">
-		<meta name="author" content="Élysson Mendes Rezende">
+		<title>Criando um Pacote Django</title>
+		<meta name="description" content="Passo a Passo para criar um Pacote Django">
+		<meta name="author" content="Élysson MR <www.elyssonmr.com>">
 
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -34,52 +34,54 @@
 		<div class="reveal">
 			<div class="slides">
 				<section>
-					<h1>Creating a Django Package</h1>
-					<h3>Step by step to create your third party Django package</h3>
+					<h1>Criando um Pacote Django</h1>
+					<h3>Passo a Passo para criar o seu pacote Django</h3>
 					<p>
-						<small>Created by <a href="http://elyssonmr.com.br">Élysson Mendes Rezende</a></small>
+                        <small>VI encontro PythonOnRio</small><br>
+						<small><a href="http://elyssonmr.com">Élysson Mendes Rezende</a></small><br>
+                        <small>Desenvolvedor pleno na <a href="http://www.brbid.com">BrBid.com</a></small>
 					</p>
 				</section>
 
 				<section>
-					<h2>What is a Django package?</h2>
+					<h2>O que é um um Pacote Django?</h2>
 					<ul>
-						<li>Reusable code for a commom problem</li>
-						<li>Essentially a Django Package is a Python Package</li>
-						<li>Could be a package or an entire Django Application</li>
-						<li>A package should contain the "__init__.py" file</li>
-						<li>In case of Django application it should follow common Django conventions such as models, tests, urls and views</li>
-						<li>A package should only depends of itself</li>
+						<li class="fragment fade-in">Código Reusável para resolver problemas comuns</li>
+						<li class="fragment fade-in">Essencialmente um pacote Django é um Pacote Python</li>
+						<li class="fragment fade-in">Pode ser um pacotezinho ou um App Django Completo</li>
+						<li class="fragment fade-in">Um pacote deve contar o arquivo "__init__.py" (Dunder Init)</li>
+						<li class="fragment fade-in">No caso de uma aplicação Django, deve-se seguir toda a convenção do Django, tais como, <i>models</i>, <i>tests</i>, <i>urls</i> and <i>views</i></li>
+						<li class="fragment fade-in">Um pacote deve depender somente de si mesmo</li>
 					</ul>
 				</section>
 
 				<section>
-					<h2>Creating the app</h2>
+					<h2>Criando o Aplicativo</h2>
 					<ol>
-						<li>Create a Django app with a name of your choice. I.e: notification</li>
-						<li>Create the "templatetags" folder inside the new app</li>
-						<li>Create a template tag file "notify.py" and create a "__init__.py" file. Leave they empty for now</li>
-						<li>We are going to add some content later</li>
+						<li class="fragment fade-in">Criar um App Django com um nome da sua escolha. Examplo: notificacoes</li>
+						<li class="fragment fade-in">Criar a pasta "templatetags" dentro do nosso novo app</li>
+						<li class="fragment fade-in">Criar o arquivo de <i>template tag</i> "notificacao.py" e criar o "dunder init"</li>
+						<li class="fragment fade-in">Deixaremos em branco por enquanto. Vamos adicionar o conteúdo depois</li>
 					</ol>
 				</section>
 
 				<section>
-					<h2>Configuring the package</h2>
+					<h2>Configurando o Pacote</h2>
 					<ul>
-						<li>Create a file called "setup.py" inside project's root directory</li>
-						<li>This file contains some information about the package. Such as: name, version, packages, descripton and etc</li>
-						<li>Write some code so that your file should be like this:</li>
-					</ul>
-					<pre><code class="python"># coding: utf-8
+						<li class="fragment fade-in">Criar um arquivo "setup.py" dentro do diretório raiz</li>
+						<li class="fragment fade-in">Esse arquivo contem informações sobre o pacote. Por exemplo: <i>name</i>, <i>version</i>, <i>packages</i>, <i>descripton</i> e etc</li>
+						<li class="fragment fade-in">
+                            Vamos escrever mais um pouco de código?
+                            <pre><code class="python"># coding: utf-8
 import os
 from setuptools import setup
 current_dir = os.path.abspath(os.path.dirname(__file__))
 readme = open(os.path.join(current_dir, 'README.md')).read()
 setup(
-    name='django-templatetags',
+    name='pythononrio-templatetags',
     version='1.0',
-    packages=['notifications'],
-    description='Custom tenplate tags for notification',
+    packages=['notificacoes'],
+    description='Templates Tags desenvolvidos no Python On Rio',
     long_description=readme,
     author='Élysson MR',
     author_email='elyssonmr@gmail.com',
@@ -88,29 +90,34 @@ setup(
     install_requires=[
         'Django>=1.8',
     ]
-)</code></pre>
+)
+    </code></pre>
+                        </li>
+					</ul>
 				</section>
 
 				<section>
-					<h2>Configuring the package</h2>
+					<h2>Configurando o Pacote</h2>
 					<ul>
-						<li>Finally we need a manifest file telling what files we want to distribute</li>
-						<li>Create a file called "MANIFEST.in" inside project's root directory with those lines:</li>
-					</ul>
-					<pre><code>
+						<li class="fragment fade-in">Finalmente é necessário um arquivo <i>manifest</i> com os arquivos que gostariamos de distribuir</li>
+						<li class="fragment fade-in">
+                            Criar um arquivo chamado <i>MANIFEST.in</i> dentro da pasta raiz do projeto:
+                            <pre><code>
 include *.md
-recursive-include templatetagspkg *.py *.html
-					</code></pre>
+recursive-include notificacoes *.py *.html
+        					</code></pre>
+                        </li>
+					</ul>
 				</section>
 
 				<section>
-					<h2>Installing the package</h2>
+					<h2>Instalando o Pacote</h2>
 					<ul>
-						<li>Now the package is ready to be installed</li>
-						<li>To do it just run "python setup.py develop"</li>
-						<li>If everything is installed correctly, this message should be shown:</li>
-					</ul>
-					<pre><code>$ python setup.py develop
+						<li class="fragment fade-in">Agora o pacote já está pronto para ser instalado</li>
+						<li class="fragment fade-in">Para isso basta rodar o comando "python setup.py develop"</li>
+						<li class="fragment fade-in">
+                            Se tive tiver sido instalado corretamente, a seguinte mensagem será exibida:
+                            <pre><code>$ python setup.py develop
 ...
 Installed /path/to/project/django_pkg
 Processing dependencies for django-templatetags==1.0
@@ -120,61 +127,64 @@ Adding Django 1.8.5 to easy-install.pth file
 Installing django-admin script to /home/user/.virtualenvs/venv/bin
 
 Using /home/user/.virtualenvs/venv/lib/python2.7/site-packages
-Finished processing dependencies for django-templatetags==1.0</code></pre>
-				</section>
-
-				<section>
-					<h2>Now What?</h2>
-					<ul>
-						<li>Now our packages is ready to be distributed</li>
-						<li>We just need to add some code! Right?</li>
-						<li>After that we can distribute it for everyone!!!</li>
+Finished processing dependencies for django-templatetags==1.0
+                            </code></pre>
+                        </li>
 					</ul>
 				</section>
 
 				<section>
-					<h2>Coding some template tags</h2>
+					<h2>E agora?</h2>
 					<ul>
-						<li>First we have to write some templatetags in "notification/templatetags/notify.py":</li>
+						<li class="fragment fade-in">Agora o pacote esta pronto para ser distribuído</li>
+						<li class="fragment fade-in">Antes precisamos adicionar o código! Certo? ;D</li>
+						<li class="fragment fade-in">Depois poderemos distribu-lo para todo mundo!!!</li>
 					</ul>
-					<pre><code class="python"># coding: utf-8
+				</section>
+
+				<section>
+					<h2>Codificando algumas template tags</h2>
+					<ul>
+						<li>
+                            O primeiro passo é criar o arquivo <i>notification/templatetags/notify.py</i> com o código:
+                            <pre><code class="python"># coding: utf-8
 
 from django import template
-
 
 register = template.Library()
 
 
-@register.inclusion_tag('notification/notification.html')
+@register.inclusion_tag('notificacoes/notification.html')
 def render_notification():
     return {}
 
 
 @register.filter
 def format_hello(value, nome):
-    return value % (nome)
-					</code></pre>
+    return value % (nome)</code></pre>
+                        </li>
+					</ul>
 				</section>
 
 				<section>
-					<h2>Coding some template tags</h2>
+					<h2>Codificando algumas template tags</h2>
 					<ul>
-						<li>Now we have to create o html file in "notification/templates/notification/notification.html":</li>
+						<li>
+                            Vamos criar o arquivo HTML <i>notificacoes/templates/notificacoes/notificacao.html</i> para ser usado junto com a nossa template tag:
+                            <pre><code class="html"><p>Oi eu sou uma notificação!</p></code></pre>
+                        </li>
 					</ul>
-					<pre><code class="html">
-<p>Hi I am a notification</p>
-					</code></pre>
 				</section>
 
 				<section>
-					<h2>Testing template tags</h2>
+					<h2>Testanto as template tags</h2>
 					<ul>
-						<li>There is no need to create a full django project to test the code, just create a settings to use with the tests</li>
-						<li>For example: creating a "test_settings.py" inside our project's root we can execute our tests using "$ python django-admin.py test --settings=test_settings"</li>
-						<li>We just need to add a few lines to our "test_settings.py":</li>
-					</ul>
-					<pre><code class="python">INSTALLED_APPS = (
-    'notification',
+						<li class="fragment fade-in">Não há necessidade de criar uma aplicação django completa para testar o código, é necessário criar somente um settings para ser usado nos testes</li>
+						<li class="fragment fade-in">Por exemplo: criando o arquivo <i>test_settings.py</i> dentro da raiz do nosso projeto para que possamos executar os testes usando: "$ python django-admin.py test --settings=test_settings"</li>
+						<li class="fragment fade-in">
+                            É necessário adicionar algumas linhas no "test_settings.py":
+                            <pre><code class="python">INSTALLED_APPS = (
+    'notificacoes',
 )
 DATABASES = {
     'default': {
@@ -182,16 +192,17 @@ DATABASES = {
         'NAME': ':memory:',
     }
 }
-SECRET_KEY = "secret_key_for_testing"</code></pre>
+SECRET_KEY = "ultra_secret_key_for_testing"</code></pre>
+                        </li>
+					</ul>
 				</section>
 
 				<section>
-					<h2>Testing template tags</h2>
+					<h2>Testando as template tags</h2>
 					<ul>
-						<li>Now we need to write some tests to validate those template tags</li>
-						<li>The test module "notification/test.py" should looks like:</li>
-					</ul>
-					<pre><code class="python"># coding: utf-8
+						<li>Para testar as template tags precisamos de algo assim no módulo <i>notificacoes/test.py</i>:</li>
+                    </ul>
+                    <pre><code class="python"># coding: utf-8
 from django.test import TestCase
 from django.template import Context
 from django.template import Template
@@ -202,48 +213,48 @@ class TemplateTagTest(TestCase):
 
     def test_templatetag_inclusion(self):
         rendered = self.template.render(Context())
-        self.assertIn('am a notification', rendered)
+        self.assertIn(u'sou uma notificação', rendered)
 
 class FilterTest(TestCase):
     def setUp(self):
-		self.template = Template('{% load notify %}' +
-			' {{ "Hello %s, How are you?"|format_hello:"Élysson MR" }}')
+		self.template = Template(u'{% load notify %}' +
+			u' {{ "Oi %s, Como você esta?"|format_hello:"Élysson MR" }}')
 
     def test_filter(self):
         rendered = self.template.render(Context())
         self.assertIn(u'Élysson MR', rendered)</code></pre>
 				</section>
 				<section>
-					<h2>Distributing</h2>
+					<h2>Distribuíndo</h2>
 					<ul>
-						<li>Now everything is ready to distribute the package for everyone</li>
-						<li>But first we have to register a new <a href="https://pypi.python.org/pypi?%3Aaction=register_form">PyPi account</a></li>
-						<li>After the registration open your console and run "python setup.py register"</li>
-						<li>Select option "1", put your username and password and your package is now registered</li>
-						<li>To finish we need to upload all files to PyPi server, run "python setup.py sdist upload"</li>
+						<li class="fragment fade-in">Agora que tudo esta pronto, podemos distribuir nosso pacote para todo mundo</li>
+						<li class="fragment fade-in">Mas antes teremos que regitrar uma nova <a href="https://pypi.python.org/pypi?%3Aaction=register_form">Conta PyPi</a></li>
+						<li class="fragment fade-in">Após o registro, devemos abrir o terminal e rodar "python setup.py register"</li>
+						<li class="fragment fade-in">Seleciona a opção "1", entrar com o usuário e a senha e o pacote será registrado</li>
+						<li class="fragment fade-in">Para finalizar temos que enviar todos os arquivos para o servidor do PyPi rodando "python setup.py sdist upload"</li>
 					</ul>
 				</section>
 
 				<section>
-					<h2>Now we're done</h2>
+					<h2>Agora Sim!!</h2>
 					<ul>
-						<li>Now everyone can add our package using the pip command "pip install django-templatetags"</li>
-						<li>Then just add the app name into INSTALLED_APPS in the settings file</li>
-						<li>To upload an update just run the upload command again, remmember to change your "setup.py" version</li>
+						<li class="fragment fade-in">Todo mundo poderá usar o nosso pacote usando o comando "pip install pythononrio-templatetags"</li>
+						<li class="fragment fade-in">Para usa-lo, basta adicionar o app na configuração INSTALLED_APPS do settings do Django</li>
+						<li class="fragment fade-in">Para enviar uma atualização basta somente utilizar o comando de upload outra vez, lembre-se de alterar a versão do seu "setup.py"</li>
 					</ul>
 				</section>
 
 				<section>
-					<h2>Conclusion</h2>
+					<h2>Conclusão</h2>
 					<ul>
-						<li>The process to create a Django package is very simple</li>
-						<li>Many times we code to solve the same problems, why not create a package for that?</li>
-						<li>Using packages we can share many solutions of common problems with others developers</li>
+						<li>O processo para criar um pacote é bem simples</li>
+						<li>Diversas vezes nós codificamos para resolver os mesmos problemas, porque não escrever um pacote para isso?</li>
+						<li>Usando pacotes podemos compartilhar com outros desenvolvedores diversas soluções para problemas comuns</li>
 					</ul>
 				</section>
 
 				<section>
-					<h2>References</h2>
+					<h2>Referências</h2>
 					<ul>
 						<li><a href="http://hirokiky.org/tech/create_django_library.html#create-your-application">How to create your first Django Package</a></li>
 						<li><a href="https://docs.djangoproject.com/en/1.8/intro/reusable-apps/">How to write reusable apps</a></li>
@@ -253,8 +264,8 @@ class FilterTest(TestCase):
 				</section>
 
 				<section>
-					<h2>Thank you!!</h2>
-					<a href="http://elyssonmr.com.br">Élysson Mendes Rezende</a>
+					<h2>Muito Obrigado!!</h2>
+					<a href="http://elyssonmr.com">Élysson Mendes Rezende</a>
 				</section>
 			</div>
 		</div>
